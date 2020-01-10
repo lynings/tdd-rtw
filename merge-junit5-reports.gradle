@@ -1,0 +1,38 @@
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'jacoco'
+
+    jacocoTestReport {
+        additionalSourceDirs = files(sourceSets.main.allSource.srcDirs)
+        sourceDirectories = files(sourceSets.main.allSource.srcDirs)
+        classDirectories = files(sourceSets.main.output)
+        reports {
+            html.enabled = true
+            xml.enabled = true
+            csv.enabled = false
+        }
+    }
+}
+
+task jacocoRootReport(type: JacocoReport) {
+    dependsOn = allprojects.test
+    additionalSourceDirs = files(allprojects.sourceSets.main.allSource.srcDirs)
+    sourceDirectories = files(allprojects.sourceSets.main.allSource.srcDirs)
+    classDirectories = files(allprojects.sourceSets.main.output)
+    executionData = files(allprojects.jacocoTestReport.executionData)
+    reports {
+        html.enabled = true
+        xml.enabled = true
+        csv.enabled = false
+    }
+    onlyIf = {
+        true
+    }
+    doFirst {
+        executionData = files(executionData.findAll {
+            it.exists()
+        })
+    }
+}
+
+check.dependsOn jacocoRootReport

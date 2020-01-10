@@ -1,0 +1,30 @@
+plugins {
+    id 'idea'
+    id 'java'
+    id 'jacoco'
+}
+
+group 'pers.lyning'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'jacoco'
+
+    repositories {
+        mavenLocal()
+        maven { url 'http://maven.aliyun.com/nexus/content/repositories/central/' }
+        mavenCentral()
+    }
+
+    dependencies {
+        project(':ioc')
+    }
+
+    // 集成 junit5 和 测试覆盖率
+    apply from: rootProject.file("junit5-coverage.gradle")
+}
+apply from: rootProject.file("merge-junit5-reports.gradle")
+
