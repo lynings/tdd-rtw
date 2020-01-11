@@ -2,6 +2,8 @@ package pers.lyning.tddrtw.ioc;
 
 import pers.lyning.tddrtw.ioc.exception.InstanceNotFountException;
 
+import java.util.List;
+
 /**
  * @author lyning
  */
@@ -21,14 +23,21 @@ public class Container {
     }
 
     public <T> T get(Class<T> clazz) {
-        if (!contain(clazz)) {
-            throw new InstanceNotFountException(String.format("%s not registered", clazz.toString()));
-        }
+        List<Dependence> dependencies = new DependenceResolver(clazz).resolve();
+        checkRegistered(dependencies);
         return injecter.get(clazz);
     }
 
     public Container register(Class<?> clazz) {
         registrar.register(clazz);
         return this;
+    }
+
+    private void checkRegistered(List<Dependence> dependencies) {
+        for (Dependence dependency : dependencies) {
+            if (!contain(dependency.getValue())) {
+                throw new InstanceNotFountException(String.format("%s not registered", dependency.getValue().toString()));
+            }
+        }
     }
 }

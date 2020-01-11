@@ -88,6 +88,17 @@ class ContainerTest {
 
     @Nested
     class InjectWithParametersConstructorTest {
+
+        @Test
+        void should_failure_when_A_class_not_registered() throws Exception {
+            // given
+            ioc.register(OneDependence.class);
+            // when
+            Assert<?, ? extends Throwable> assertThatThrownBy = assertThatThrownBy(() -> ioc.get(OneDependence.class));
+            // then
+            assertThatThrownBy.isInstanceOf(InstanceNotFountException.class);
+        }
+
         @Test
         void should_failure_when_cyclic_dependency() throws Exception {
             // given
@@ -108,6 +119,7 @@ class ContainerTest {
         void should_return_a_instance_when_injected_a_constructor_parameter_instance() throws Exception {
             // given
             ioc.register(OneDependence.class);
+            ioc.register(OneDependence.A.class);
             // when
             OneDependence instance = ioc.get(OneDependence.class);
             // then
