@@ -1,6 +1,9 @@
 package pers.lyning.tddrtw.ioc;
 
-import static pers.lyning.tddrtw.ioc.LayerDependencies.TOP_LAYER;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
+import static pers.lyning.tddrtw.ioc.Dependencies.TOP_LAYER;
 
 /**
  * @author lyning
@@ -9,13 +12,13 @@ class DependenceResolver {
 
     private final Class<?> clazz;
 
-    private final DependencyPath dependencyPath = new DependencyPath();
+    private final Dependencies dependencies;
 
-    private final LayerDependencies layerDependencies;
+    private final DependencyPath dependencyPath = new DependencyPath();
 
     public DependenceResolver(Class<?> clazz) {
         this.clazz = clazz;
-        layerDependencies = LayerDependencies.root(clazz);
+        dependencies = Dependencies.root(clazz);
         dependencyPath.put(clazz);
     }
 
@@ -37,9 +40,12 @@ class DependenceResolver {
      *
      * @return
      */
-    public LayerDependencies resolve() {
+    public List<Dependence> resolve() {
         depthFirstResolve(clazz, TOP_LAYER + 1);
-        return layerDependencies;
+        return dependencies.asList()
+                .stream()
+                .sorted((a, b) -> b.getLayer().compareTo(a.getLayer()))
+                .collect(toList());
     }
 
     private void depthFirstResolve(Class<?> clazz, int layer) {
@@ -48,7 +54,7 @@ class DependenceResolver {
         for (Class<?> dependency : parameterTypes) {
             dependencyPath.put(dependency);
             CircularReferenceChecker.check(dependencyPath);
-            layerDependencies.put(layer, dependency);
+            dependencies.put(layer, dependency);
             depthFirstResolve(dependency, layer + 1);
         }
     }

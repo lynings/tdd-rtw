@@ -8,12 +8,12 @@ import java.util.List;
  * @author lyning
  */
 @Getter
-class LayerDependence {
+class Dependence {
     private final List<Class<?>> dependencies;
 
     private final Integer layer;
 
-    public LayerDependence(Integer layer, List<Class<?>> dependencies) {
+    public Dependence(Integer layer, List<Class<?>> dependencies) {
         this.layer = layer;
         this.dependencies = dependencies;
     }

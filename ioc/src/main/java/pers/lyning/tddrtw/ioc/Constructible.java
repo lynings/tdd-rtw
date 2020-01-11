@@ -7,16 +7,16 @@ import java.lang.reflect.Constructor;
 /**
  * @author lyning
  */
-public class Constructible {
+class Constructible {
     private final Constructor<?> constructor;
 
     public Constructible(Constructor<?> constructor) {
         this.constructor = constructor;
     }
 
-    public <T> T newInstance(Object[] initArgs) {
+    public Instance newInstance(Object[] initArgs) {
         try {
-            return (T) constructor.newInstance(initArgs);
+            return new Instance(constructor.newInstance(initArgs));
         } catch (Exception e) {
             throw new InstantiationException("instantiation exception!");
         }

@@ -12,7 +12,7 @@ import static java.util.stream.Collectors.toList;
 /**
  * @author lyning
  */
-class LayerDependencies {
+class Dependencies {
 
     public static final int TOP_LAYER = 1;
 
@@ -21,14 +21,14 @@ class LayerDependencies {
     @Getter
     private final Class<?> root;
 
-    private LayerDependencies(Class<?> root) {
+    private Dependencies(Class<?> root) {
         this.root = root;
     }
 
-    public List<LayerDependence> asList() {
+    public List<Dependence> asList() {
         return layerToDependenciesMap.entrySet()
                 .stream()
-                .map(entry -> new LayerDependence(entry.getKey(), entry.getValue()))
+                .map(entry -> new Dependence(entry.getKey(), entry.getValue()))
                 .collect(toList());
     }
 
@@ -37,10 +37,10 @@ class LayerDependencies {
         layerToDependenciesMap.get(layer).add(clazz);
     }
 
-    public static LayerDependencies root(Class<?> root) {
-        LayerDependencies layerDependencies = new LayerDependencies(root);
-        layerDependencies.put(TOP_LAYER, root);
-        return layerDependencies;
+    public static Dependencies root(Class<?> root) {
+        Dependencies dependencies = new Dependencies(root);
+        dependencies.put(TOP_LAYER, root);
+        return dependencies;
     }
 }
 

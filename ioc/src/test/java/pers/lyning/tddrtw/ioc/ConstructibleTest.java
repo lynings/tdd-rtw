@@ -28,7 +28,7 @@ class ConstructibleTest {
         Constructor<?> constructor = Sample.class.getDeclaredConstructors()[0];
         Constructible constructible = new Constructible(constructor);
         // when
-        Sample sample = constructible.newInstance(new Object[]{100});
+        Sample sample = constructible.newInstance(new Object[]{100}).value();
         // then
         assertThat(sample.count).isEqualTo(100);
     }
