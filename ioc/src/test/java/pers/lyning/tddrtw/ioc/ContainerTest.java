@@ -102,13 +102,13 @@ class ContainerTest {
         @Test
         void should_failure_when_cyclic_dependency() throws Exception {
             // given
-            ioc.register(CyclicDependency.A.class);
-            ioc.register(CyclicDependency.B.class);
-            ioc.register(CyclicDependency.C.class);
-            ioc.register(CyclicDependency.D.class);
-            ioc.register(CyclicDependency.E.class);
-            ioc.register(CyclicDependency.F.class);
-            ioc.register(CyclicDependency.class);
+            ioc.register(CyclicDependency.A.class)
+                    .register(CyclicDependency.B.class)
+                    .register(CyclicDependency.C.class)
+                    .register(CyclicDependency.D.class)
+                    .register(CyclicDependency.E.class)
+                    .register(CyclicDependency.F.class)
+                    .register(CyclicDependency.class);
             // when
             Assert<?, ? extends Throwable> assertThatThrownBy = assertThatThrownBy(() -> ioc.get(CyclicDependency.class));
             // then
@@ -118,8 +118,8 @@ class ContainerTest {
         @Test
         void should_return_a_instance_when_injected_a_constructor_parameter_instance() throws Exception {
             // given
-            ioc.register(OneDependence.class);
-            ioc.register(OneDependence.A.class);
+            ioc.register(OneDependence.class)
+                    .register(OneDependence.A.class);
             // when
             OneDependence instance = ioc.get(OneDependence.class);
             // then
@@ -129,13 +129,13 @@ class ContainerTest {
         @Test
         void should_return_a_instance_when_injected_two_constructor_parameter_instance() throws Exception {
             // given
-            ioc.register(TwoDependence.class);
-            ioc.register(TwoDependence.A.class);
-            ioc.register(TwoDependence.InnerA1.class);
-            ioc.register(TwoDependence.InnerA2.class);
-            ioc.register(TwoDependence.B.class);
-            ioc.register(TwoDependence.InnerB1.class);
-            ioc.register(TwoDependence.InnerB2.class);
+            ioc.register(TwoDependence.class)
+                    .register(TwoDependence.A.class)
+                    .register(TwoDependence.InnerA1.class)
+                    .register(TwoDependence.InnerA2.class)
+                    .register(TwoDependence.B.class)
+                    .register(TwoDependence.InnerB1.class)
+                    .register(TwoDependence.InnerB2.class);
             // when
             TwoDependence instance = ioc.get(TwoDependence.class);
             // then
