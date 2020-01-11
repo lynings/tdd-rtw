@@ -1,8 +1,10 @@
 package pers.lyning.tddrtw.ioc;
 
 import pers.lyning.tddrtw.ioc.exception.InstanceNotFountException;
+import pers.lyning.tddrtw.ioc.exception.RepeatedRegisteredException;
 
 import java.util.List;
+import java.util.Vector;
 
 /**
  * @author lyning
@@ -11,15 +13,14 @@ public class Container {
 
     private final Injecter injecter;
 
-    private final Registrar registrar;
+    private final List<Class<?>> registries = new Vector<>();
 
     public Container() {
         injecter = new ConstructorInjecter();
-        registrar = new SimpleRegistrar();
     }
 
     public boolean contain(Class<?> clazz) {
-        return registrar.contains(clazz);
+        return registries.contains(clazz);
     }
 
     public <T> T get(Class<T> clazz) {
@@ -29,7 +30,10 @@ public class Container {
     }
 
     public Container register(Class<?> clazz) {
-        registrar.register(clazz);
+        if (registries.contains(clazz)) {
+            throw new RepeatedRegisteredException(String.format("%s existed", clazz.toString()));
+        }
+        registries.add(clazz);
         return this;
     }
 
