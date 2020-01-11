@@ -11,7 +11,7 @@ class Instance {
     }
 
     public boolean isInstanceOf(Class<?> clazz) {
-        return clazz.isInstance(value);
+        return value.getClass().isAssignableFrom(clazz);
     }
 
     public <T> T value() {
