@@ -4,8 +4,7 @@ import lombok.Getter;
 
 /**
  * 循环依赖：
- * E -> F
- * F -> E
+ * A -> A
  *
  * @author lyning
  */
