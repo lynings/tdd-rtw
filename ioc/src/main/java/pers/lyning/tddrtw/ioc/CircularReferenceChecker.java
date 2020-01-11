@@ -9,7 +9,7 @@ import java.util.List;
  */
 class CircularReferenceChecker {
 
-    public static void check(DependencyPath dependencyPath) {
+    public static void check(DependenceResolver.DependencyPath dependencyPath) {
         List<String> dependencies = dependencyPath.asReverseList();
         for (int index = 1, size = dependencies.size(); index <= size - 1; index++) {
             if (2 * index > size) {

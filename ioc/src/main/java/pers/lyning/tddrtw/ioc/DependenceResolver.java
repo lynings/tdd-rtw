@@ -1,5 +1,7 @@
 package pers.lyning.tddrtw.ioc;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -56,6 +58,25 @@ class DependenceResolver {
             CircularReferenceChecker.check(dependencyPath);
             dependencies.put(layer, dependency);
             depthFirstResolve(dependency, layer + 1);
+        }
+    }
+
+    /**
+     * @author lyning
+     */
+    static class DependencyPath {
+        private final List<Class<?>> dependencyPaths = new ArrayList<>();
+
+        List<String> asReverseList() {
+            List<String> dependencies = dependencyPaths.stream()
+                    .map(Class::getCanonicalName)
+                    .collect(toList());
+            Collections.reverse(dependencies);
+            return dependencies;
+        }
+
+        void put(Class<?> dependence) {
+            dependencyPaths.add(dependence);
         }
     }
 }
