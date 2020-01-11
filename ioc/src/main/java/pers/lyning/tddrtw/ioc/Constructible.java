@@ -16,7 +16,7 @@ class Constructible {
 
     public Instance newInstance(Object[] initArgs) {
         try {
-            return new Instance(constructor.getDeclaringClass(), constructor.newInstance(initArgs));
+            return new Instance(constructor.newInstance(initArgs));
         } catch (Exception e) {
             throw new InstantiationException("instantiation exception!");
         }
