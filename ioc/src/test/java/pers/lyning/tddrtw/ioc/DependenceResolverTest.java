@@ -3,10 +3,7 @@ package pers.lyning.tddrtw.ioc;
 import org.assertj.core.api.Assert;
 import org.junit.jupiter.api.Test;
 import pers.lyning.tddrtw.ioc.exception.CircularReferenceException;
-import pers.lyning.tddrtw.ioc.sample.CyclicDependency;
-import pers.lyning.tddrtw.ioc.sample.NoDependence;
-import pers.lyning.tddrtw.ioc.sample.OneDependence;
-import pers.lyning.tddrtw.ioc.sample.TwoDependence;
+import pers.lyning.tddrtw.ioc.sample.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,9 +66,19 @@ class DependenceResolverTest {
     }
 
     @Test
-    void should_failure_when_cyclic_dependency() throws Exception {
+    void should_failure_when_cyclic_dependency1() throws Exception {
         // given
         DependenceResolver dependenceResolver = new DependenceResolver(CyclicDependency.class);
+        // when
+        Assert<?, ? extends Throwable> assertThatThrownBy = assertThatThrownBy(dependenceResolver::resolve);
+        // then
+        assertThatThrownBy.isInstanceOf(CircularReferenceException.class);
+    }
+
+    @Test
+    void should_failure_when_cyclic_dependency2() throws Exception {
+        // given
+        DependenceResolver dependenceResolver = new DependenceResolver(CyclicDependencyA.class);
         // when
         Assert<?, ? extends Throwable> assertThatThrownBy = assertThatThrownBy(dependenceResolver::resolve);
         // then
