@@ -32,7 +32,7 @@ class ConstructorInjecter implements Injecter {
     private void inject(List<Dependence> dependencies) {
         for (Dependence dependence : dependencies) {
             Class<?> clazz = dependence.getValue();
-            instances.put(clazz, inject(clazz));
+            instances.put(inject(clazz));
         }
     }
 }

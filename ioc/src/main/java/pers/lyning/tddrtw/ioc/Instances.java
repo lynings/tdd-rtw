@@ -1,24 +1,29 @@
 package pers.lyning.tddrtw.ioc;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import pers.lyning.tddrtw.ioc.exception.InstanceNotFountException;
+
+import java.util.List;
+import java.util.Vector;
 
 /**
  * @author lyning
  */
 public class Instances {
 
-    private final Map<Class<?>, Instance> classToInstanceMap = new ConcurrentHashMap<>();
+    private final List<Instance> instances = new Vector<>();
 
     public boolean contain(Class<?> clazz) {
-        return classToInstanceMap.containsKey(clazz);
+        return instances.stream().anyMatch(instance -> instance.type() == clazz);
     }
 
     public Instance get(Class<?> clazz) {
-        return classToInstanceMap.get(clazz);
+        return instances.stream()
+                .filter(instance -> instance.type() == clazz)
+                .findFirst()
+                .orElseThrow(() -> new InstanceNotFountException(String.format("%s not registered!", clazz.toString())));
     }
 
-    public void put(Class<?> clazz, Instance instance) {
-        classToInstanceMap.putIfAbsent(clazz, instance);
+    public void put(Instance instance) {
+        instances.add(instance);
     }
 }
