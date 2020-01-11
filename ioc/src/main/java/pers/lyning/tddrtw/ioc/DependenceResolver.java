@@ -33,8 +33,9 @@ class DependenceResolver {
      * <p>
      * return:
      * [
-     * {1: ["A"]},
-     * {2: "B", "C"]}
+     * {1: "A"},
+     * {2: "B"}
+     * {2: "C"}
      * ]
      * <p>
      * -- A       -> 1(layer)
