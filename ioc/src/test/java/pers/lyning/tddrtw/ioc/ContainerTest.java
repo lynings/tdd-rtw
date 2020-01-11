@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import pers.lyning.tddrtw.ioc.exception.CircularReferenceException;
-import pers.lyning.tddrtw.ioc.exception.InjectException;
+import pers.lyning.tddrtw.ioc.exception.InstanceNotFountException;
 import pers.lyning.tddrtw.ioc.exception.RepeatedRegisteredException;
 import pers.lyning.tddrtw.ioc.sample.CyclicDependencyConstructor;
 import pers.lyning.tddrtw.ioc.sample.NoParameterConstructor;
@@ -59,9 +59,9 @@ class ContainerTest {
         @Test
         void should_inject_failure_when_the_class_unregistered_with_ioc() throws Exception {
             // when
-            Assert<?, ? extends Throwable> assertThatThrownBy = assertThatThrownBy(() -> ioc.inject(NoParameterConstructor.class));
+            Assert<?, ? extends Throwable> assertThatThrownBy = assertThatThrownBy(() -> ioc.get(NoParameterConstructor.class));
             // then
-            assertThatThrownBy.isInstanceOf(InjectException.class);
+            assertThatThrownBy.isInstanceOf(InstanceNotFountException.class);
         }
 
         @Test
@@ -69,7 +69,7 @@ class ContainerTest {
             // given
             ioc.register(NoParameterConstructor.class);
             // when
-            NoParameterConstructor noParameterConstructor = ioc.inject(NoParameterConstructor.class);
+            NoParameterConstructor noParameterConstructor = ioc.get(NoParameterConstructor.class);
             // then
             assertThat(noParameterConstructor).isNotNull();
         }
@@ -79,8 +79,8 @@ class ContainerTest {
             // given
             ioc.register(NoParameterConstructor.class);
             // when
-            NoParameterConstructor noParameterConstructor1 = ioc.inject(NoParameterConstructor.class);
-            NoParameterConstructor noParameterConstructor2 = ioc.inject(NoParameterConstructor.class);
+            NoParameterConstructor noParameterConstructor1 = ioc.get(NoParameterConstructor.class);
+            NoParameterConstructor noParameterConstructor2 = ioc.get(NoParameterConstructor.class);
             // then
             assertThat(noParameterConstructor1).isEqualTo(noParameterConstructor2);
         }
@@ -99,7 +99,7 @@ class ContainerTest {
             ioc.register(CyclicDependencyConstructor.F.class);
             ioc.register(CyclicDependencyConstructor.class);
             // when
-            Assert<?, ? extends Throwable> assertThatThrownBy = assertThatThrownBy(() -> ioc.inject(CyclicDependencyConstructor.class));
+            Assert<?, ? extends Throwable> assertThatThrownBy = assertThatThrownBy(() -> ioc.get(CyclicDependencyConstructor.class));
             // then
             assertThatThrownBy.isInstanceOf(CircularReferenceException.class);
         }
@@ -109,7 +109,7 @@ class ContainerTest {
             // given
             ioc.register(OneParameterizedConstructor.class);
             // when
-            OneParameterizedConstructor instance = ioc.inject(OneParameterizedConstructor.class);
+            OneParameterizedConstructor instance = ioc.get(OneParameterizedConstructor.class);
             // then
             assertThat(instance).isNotNull();
         }
@@ -125,7 +125,7 @@ class ContainerTest {
             ioc.register(TwoParameterizedConstructor.InnerB1.class);
             ioc.register(TwoParameterizedConstructor.InnerB2.class);
             // when
-            TwoParameterizedConstructor instance = ioc.inject(TwoParameterizedConstructor.class);
+            TwoParameterizedConstructor instance = ioc.get(TwoParameterizedConstructor.class);
             // then
             assertThat(instance).isNotNull();
         }

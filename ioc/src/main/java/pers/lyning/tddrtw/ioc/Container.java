@@ -1,6 +1,6 @@
 package pers.lyning.tddrtw.ioc;
 
-import pers.lyning.tddrtw.ioc.exception.InjectException;
+import pers.lyning.tddrtw.ioc.exception.InstanceNotFountException;
 
 /**
  * @author lyning
@@ -20,9 +20,9 @@ public class Container {
         return registrar.contains(clazz);
     }
 
-    public <T> T inject(Class<T> clazz) {
+    public <T> T get(Class<T> clazz) {
         if (!contain(clazz)) {
-            throw new InjectException(String.format("%s unregistered", clazz.toString()));
+            throw new InstanceNotFountException(String.format("%s not registered", clazz.toString()));
         }
         return injecter.get(clazz);
     }
