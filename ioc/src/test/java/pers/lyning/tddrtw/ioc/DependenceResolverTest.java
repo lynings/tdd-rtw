@@ -41,13 +41,13 @@ class DependenceResolverTest {
         // given
         DependenceResolver dependenceResolver = new DependenceResolver(NoDependence.class);
         // when
-        List<Dependence> actualLayerDependencies = dependenceResolver.resolve();
+        List<Dependence> actualDependencies = dependenceResolver.resolve();
         // then
-        List<Dependence> expectedLayerDependencies = new ArrayList<>();
-        expectedLayerDependencies.add(new Dependence(1, NoDependence.class));
-        assertThat(actualLayerDependencies)
+        List<Dependence> expectedDependencies = new ArrayList<>();
+        expectedDependencies.add(new Dependence(1, NoDependence.class));
+        assertThat(actualDependencies)
                 .usingRecursiveFieldByFieldElementComparator()
-                .containsExactlyInAnyOrderElementsOf(expectedLayerDependencies);
+                .containsExactlyInAnyOrderElementsOf(expectedDependencies);
     }
 
     @Test
@@ -55,14 +55,14 @@ class DependenceResolverTest {
         // given
         DependenceResolver dependenceResolver = new DependenceResolver(OneDependence.class);
         // when
-        List<Dependence> actualLayerDependencies = dependenceResolver.resolve();
+        List<Dependence> actualDependencies = dependenceResolver.resolve();
         // then
-        List<Dependence> expectedLayerDependencies = new ArrayList<>();
-        expectedLayerDependencies.add(new Dependence(1, OneDependence.class));
-        expectedLayerDependencies.add(new Dependence(2, OneDependence.A.class));
-        assertThat(actualLayerDependencies)
+        List<Dependence> expectedDependencies = new ArrayList<>();
+        expectedDependencies.add(new Dependence(1, OneDependence.class));
+        expectedDependencies.add(new Dependence(2, OneDependence.A.class));
+        assertThat(actualDependencies)
                 .usingRecursiveFieldByFieldElementComparator()
-                .containsExactlyInAnyOrderElementsOf(expectedLayerDependencies);
+                .containsExactlyInAnyOrderElementsOf(expectedDependencies);
     }
 
     @Test
@@ -70,18 +70,18 @@ class DependenceResolverTest {
         // given
         DependenceResolver dependenceResolver = new DependenceResolver(TwoDependence.class);
         // when
-        List<Dependence> actualLayerDependencies = dependenceResolver.resolve();
+        List<Dependence> actualDependencies = dependenceResolver.resolve();
         // then
-        List<Dependence> expectedLayerDependencies = new ArrayList<>();
-        expectedLayerDependencies.add(new Dependence(1, TwoDependence.class));
-        expectedLayerDependencies.add(new Dependence(2, TwoDependence.A.class));
-        expectedLayerDependencies.add(new Dependence(2, TwoDependence.B.class));
-        expectedLayerDependencies.add(new Dependence(3, TwoDependence.InnerA1.class));
-        expectedLayerDependencies.add(new Dependence(3, TwoDependence.InnerA2.class));
-        expectedLayerDependencies.add(new Dependence(3, TwoDependence.InnerB1.class));
-        expectedLayerDependencies.add(new Dependence(3, TwoDependence.InnerB2.class));
-        assertThat(actualLayerDependencies)
+        List<Dependence> expectedDependencies = new ArrayList<>();
+        expectedDependencies.add(new Dependence(1, TwoDependence.class));
+        expectedDependencies.add(new Dependence(2, TwoDependence.A.class));
+        expectedDependencies.add(new Dependence(2, TwoDependence.B.class));
+        expectedDependencies.add(new Dependence(3, TwoDependence.InnerA1.class));
+        expectedDependencies.add(new Dependence(3, TwoDependence.InnerA2.class));
+        expectedDependencies.add(new Dependence(3, TwoDependence.InnerB1.class));
+        expectedDependencies.add(new Dependence(3, TwoDependence.InnerB2.class));
+        assertThat(actualDependencies)
                 .usingRecursiveFieldByFieldElementComparator()
-                .containsExactlyInAnyOrderElementsOf(expectedLayerDependencies);
+                .containsExactlyInAnyOrderElementsOf(expectedDependencies);
     }
 }
