@@ -21,6 +21,7 @@ allprojects {
 
     dependencies {
         project(':ioc')
+        compile 'org.projectlombok:lombok:1.18.8'
     }
 
     // 集成 junit5 和 测试覆盖率
