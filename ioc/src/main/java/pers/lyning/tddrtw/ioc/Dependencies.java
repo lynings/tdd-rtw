@@ -1,7 +1,5 @@
 package pers.lyning.tddrtw.ioc;
 
-import lombok.Getter;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,11 +12,7 @@ class Dependencies {
 
     private final List<Dependence> dependencies = new ArrayList<>();
 
-    @Getter
-    private final Class<?> root;
-
-    private Dependencies(Class<?> root) {
-        this.root = root;
+    private Dependencies() {
     }
 
     public void put(Integer layer, Class<?> clazz) {
@@ -26,7 +20,7 @@ class Dependencies {
     }
 
     public static Dependencies root(Class<?> root) {
-        Dependencies dependencies = new Dependencies(root);
+        Dependencies dependencies = new Dependencies();
         dependencies.put(TOP_LAYER, root);
         return dependencies;
     }

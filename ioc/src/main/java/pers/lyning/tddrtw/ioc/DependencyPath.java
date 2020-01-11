@@ -23,8 +23,4 @@ class DependencyPath {
     void put(Class<?> dependence) {
         dependencyPaths.add(dependence);
     }
-
-    int size() {
-        return dependencyPaths.size();
-    }
 }

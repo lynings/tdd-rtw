@@ -10,13 +10,13 @@ import lombok.Getter;
  * @author lyning
  */
 @Getter
-public class CyclicDependencyConstructor {
+public class CyclicDependency {
 
     private final A a;
 
     private final B b;
 
-    public CyclicDependencyConstructor(A a, B b) {
+    public CyclicDependency(A a, B b) {
         this.a = a;
         this.b = b;
     }

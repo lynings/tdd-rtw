@@ -7,10 +7,10 @@ import org.junit.jupiter.api.Test;
 import pers.lyning.tddrtw.ioc.exception.CircularReferenceException;
 import pers.lyning.tddrtw.ioc.exception.InstanceNotFountException;
 import pers.lyning.tddrtw.ioc.exception.RepeatedRegisteredException;
-import pers.lyning.tddrtw.ioc.sample.CyclicDependencyConstructor;
-import pers.lyning.tddrtw.ioc.sample.NoParameterConstructor;
-import pers.lyning.tddrtw.ioc.sample.OneParameterizedConstructor;
-import pers.lyning.tddrtw.ioc.sample.TwoParameterizedConstructor;
+import pers.lyning.tddrtw.ioc.sample.CyclicDependency;
+import pers.lyning.tddrtw.ioc.sample.NoDependence;
+import pers.lyning.tddrtw.ioc.sample.OneDependence;
+import pers.lyning.tddrtw.ioc.sample.TwoDependence;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -31,23 +31,23 @@ class ContainerTest {
         @Test
         void should_contain_a_class_when_registered_a_class() throws Exception {
             // when
-            ioc.register(NoParameterConstructor.class);
+            ioc.register(NoDependence.class);
             // then
-            assertThat(ioc.contain(NoParameterConstructor.class)).isTrue();
+            assertThat(ioc.contain(NoDependence.class)).isTrue();
         }
 
         @Test
         void should_not_contain_a_class_when_the_class_is_not_register() throws Exception {
             // then
-            assertThat(ioc.contain(NoParameterConstructor.class)).isFalse();
+            assertThat(ioc.contain(NoDependence.class)).isFalse();
         }
 
         @Test
         void should_registry_failure_when_repeatedly_registering_the_same_class() throws Exception {
             // given
-            ioc.register(NoParameterConstructor.class);
+            ioc.register(NoDependence.class);
             // when
-            Assert<?, ? extends Throwable> assertThatThrownBy = assertThatThrownBy(() -> ioc.register(NoParameterConstructor.class));
+            Assert<?, ? extends Throwable> assertThatThrownBy = assertThatThrownBy(() -> ioc.register(NoDependence.class));
             // then
             assertThatThrownBy.isInstanceOf(RepeatedRegisteredException.class);
         }
@@ -59,7 +59,7 @@ class ContainerTest {
         @Test
         void should_inject_failure_when_the_class_unregistered_with_ioc() throws Exception {
             // when
-            Assert<?, ? extends Throwable> assertThatThrownBy = assertThatThrownBy(() -> ioc.get(NoParameterConstructor.class));
+            Assert<?, ? extends Throwable> assertThatThrownBy = assertThatThrownBy(() -> ioc.get(NoDependence.class));
             // then
             assertThatThrownBy.isInstanceOf(InstanceNotFountException.class);
         }
@@ -67,22 +67,22 @@ class ContainerTest {
         @Test
         void should_return_a_instance_when_injected_a_non_parameter_constructor_instance() throws Exception {
             // given
-            ioc.register(NoParameterConstructor.class);
+            ioc.register(NoDependence.class);
             // when
-            NoParameterConstructor noParameterConstructor = ioc.get(NoParameterConstructor.class);
+            NoDependence noDependence = ioc.get(NoDependence.class);
             // then
-            assertThat(noParameterConstructor).isNotNull();
+            assertThat(noDependence).isNotNull();
         }
 
         @Test
         void should_return_the_same_instance_when_the_same_non_parameter_constructor_instance_is_injected_multiple_times() throws Exception {
             // given
-            ioc.register(NoParameterConstructor.class);
+            ioc.register(NoDependence.class);
             // when
-            NoParameterConstructor noParameterConstructor1 = ioc.get(NoParameterConstructor.class);
-            NoParameterConstructor noParameterConstructor2 = ioc.get(NoParameterConstructor.class);
+            NoDependence noDependence1 = ioc.get(NoDependence.class);
+            NoDependence noDependence2 = ioc.get(NoDependence.class);
             // then
-            assertThat(noParameterConstructor1).isEqualTo(noParameterConstructor2);
+            assertThat(noDependence1).isEqualTo(noDependence2);
         }
     }
 
@@ -91,15 +91,15 @@ class ContainerTest {
         @Test
         void should_inject_failure_when_cyclic_dependency() throws Exception {
             // given
-            ioc.register(CyclicDependencyConstructor.A.class);
-            ioc.register(CyclicDependencyConstructor.B.class);
-            ioc.register(CyclicDependencyConstructor.C.class);
-            ioc.register(CyclicDependencyConstructor.D.class);
-            ioc.register(CyclicDependencyConstructor.E.class);
-            ioc.register(CyclicDependencyConstructor.F.class);
-            ioc.register(CyclicDependencyConstructor.class);
+            ioc.register(CyclicDependency.A.class);
+            ioc.register(CyclicDependency.B.class);
+            ioc.register(CyclicDependency.C.class);
+            ioc.register(CyclicDependency.D.class);
+            ioc.register(CyclicDependency.E.class);
+            ioc.register(CyclicDependency.F.class);
+            ioc.register(CyclicDependency.class);
             // when
-            Assert<?, ? extends Throwable> assertThatThrownBy = assertThatThrownBy(() -> ioc.get(CyclicDependencyConstructor.class));
+            Assert<?, ? extends Throwable> assertThatThrownBy = assertThatThrownBy(() -> ioc.get(CyclicDependency.class));
             // then
             assertThatThrownBy.isInstanceOf(CircularReferenceException.class);
         }
@@ -107,9 +107,9 @@ class ContainerTest {
         @Test
         void should_return_a_instance_when_injected_a_constructor_parameter_instance() throws Exception {
             // given
-            ioc.register(OneParameterizedConstructor.class);
+            ioc.register(OneDependence.class);
             // when
-            OneParameterizedConstructor instance = ioc.get(OneParameterizedConstructor.class);
+            OneDependence instance = ioc.get(OneDependence.class);
             // then
             assertThat(instance).isNotNull();
         }
@@ -117,15 +117,15 @@ class ContainerTest {
         @Test
         void should_return_a_instance_when_injected_two_constructor_parameter_instance() throws Exception {
             // given
-            ioc.register(TwoParameterizedConstructor.class);
-            ioc.register(TwoParameterizedConstructor.A.class);
-            ioc.register(TwoParameterizedConstructor.InnerA1.class);
-            ioc.register(TwoParameterizedConstructor.InnerA2.class);
-            ioc.register(TwoParameterizedConstructor.B.class);
-            ioc.register(TwoParameterizedConstructor.InnerB1.class);
-            ioc.register(TwoParameterizedConstructor.InnerB2.class);
+            ioc.register(TwoDependence.class);
+            ioc.register(TwoDependence.A.class);
+            ioc.register(TwoDependence.InnerA1.class);
+            ioc.register(TwoDependence.InnerA2.class);
+            ioc.register(TwoDependence.B.class);
+            ioc.register(TwoDependence.InnerB1.class);
+            ioc.register(TwoDependence.InnerB2.class);
             // when
-            TwoParameterizedConstructor instance = ioc.get(TwoParameterizedConstructor.class);
+            TwoDependence instance = ioc.get(TwoDependence.class);
             // then
             assertThat(instance).isNotNull();
         }

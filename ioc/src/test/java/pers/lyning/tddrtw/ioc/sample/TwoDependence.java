@@ -3,13 +3,13 @@ package pers.lyning.tddrtw.ioc.sample;
 import lombok.Getter;
 
 @Getter
-public class TwoParameterizedConstructor {
+public class TwoDependence {
 
     private final A a;
 
     private final B b;
 
-    public TwoParameterizedConstructor(A a, B b) {
+    public TwoDependence(A a, B b) {
         this.a = a;
         this.b = b;
     }

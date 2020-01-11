@@ -3,10 +3,10 @@ package pers.lyning.tddrtw.ioc.sample;
 import lombok.Getter;
 
 @Getter
-public class OneParameterizedConstructor {
+public class OneDependence {
     private final A a;
 
-    public OneParameterizedConstructor(A a) {
+    public OneDependence(A a) {
         this.a = a;
     }
 
