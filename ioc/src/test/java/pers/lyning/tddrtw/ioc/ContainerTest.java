@@ -57,7 +57,7 @@ class ContainerTest {
     class InjectWithNonParameterConstructorTest {
 
         @Test
-        void should_inject_failure_when_the_class_unregistered_with_ioc() throws Exception {
+        void should_failure_when_the_class_unregistered_with_ioc() throws Exception {
             // when
             Assert<?, ? extends Throwable> assertThatThrownBy = assertThatThrownBy(() -> ioc.get(NoDependence.class));
             // then
@@ -89,7 +89,7 @@ class ContainerTest {
     @Nested
     class InjectWithParametersConstructorTest {
         @Test
-        void should_inject_failure_when_cyclic_dependency() throws Exception {
+        void should_failure_when_cyclic_dependency() throws Exception {
             // given
             ioc.register(CyclicDependency.A.class);
             ioc.register(CyclicDependency.B.class);
