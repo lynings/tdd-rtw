@@ -1,7 +1,5 @@
 package pers.lyning.tddrtw.ioc;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -17,33 +15,30 @@ class ConstructorInjecter implements Injecter {
     private final Map<Class<?>, Instance> classToInstanceMap = new ConcurrentHashMap<>();
 
     @Override
-    public <T> T inject(Class<T> clazz) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    public <T> T get(Class<T> clazz) {
         if (classToInstanceMap.containsKey(clazz)) {
-            return (T) classToInstanceMap.get(clazz).value();
+            return classToInstanceMap.get(clazz).value();
         }
-        instanceDependencies(clazz);
-        Instance instance = instance(clazz);
-        classToInstanceMap.putIfAbsent(clazz, instance);
-        return (T) instance.value();
+        inject(resolveDependencies(clazz));
+        return classToInstanceMap.get(clazz).value();
     }
 
-    private Instance instance(Class<?> clazz) throws InstantiationException, IllegalAccessException, InvocationTargetException {
-        Constructor<?> constructor = clazz.getDeclaredConstructors()[0];
-        Class<?>[] parameterTypes = constructor.getParameterTypes();
-        Object[] initArgs = Arrays.stream(parameterTypes)
+    private Instance inject(Class<?> clazz) {
+        ConstructorResolver constructorResolver = new ConstructorResolver(clazz);
+        Constructible constructible = constructorResolver.resolve();
+        Object[] constructorArgs = Arrays.stream(constructible.parameterTypes())
                 .map(classToInstanceMap::get)
                 .map(Instance::value)
                 .toArray();
-        return new Instance(constructor.newInstance(initArgs));
+        return new Instance(constructible.newInstance(constructorArgs));
     }
 
-    private void instanceDependencies(Class<?> clazz) throws InstantiationException, IllegalAccessException, InvocationTargetException {
-        List<LayerDependence> layerDependencies = resolveDependencies(clazz);
+    private void inject(List<LayerDependence> layerDependencies) {
         List<Class<?>> dependencies = layerDependencies.stream()
                 .flatMap(layerDependence -> layerDependence.getDependencies().stream())
                 .collect(toList());
         for (Class<?> dependence : dependencies) {
-            classToInstanceMap.putIfAbsent(dependence, instance(dependence));
+            classToInstanceMap.putIfAbsent(dependence, inject(dependence));
         }
     }
 

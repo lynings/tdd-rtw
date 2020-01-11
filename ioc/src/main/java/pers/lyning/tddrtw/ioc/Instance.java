@@ -10,7 +10,7 @@ class Instance {
         this.value = value;
     }
 
-    public Object value() {
-        return value;
+    public <T> T value() {
+        return (T) value;
     }
 }

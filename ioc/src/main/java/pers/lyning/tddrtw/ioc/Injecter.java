@@ -5,5 +5,5 @@ package pers.lyning.tddrtw.ioc;
  */
 public interface Injecter {
 
-    <T> T inject(Class<T> clazz) throws Exception;
+    <T> T get(Class<T> clazz);
 }

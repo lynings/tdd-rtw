@@ -1,32 +1,35 @@
 package pers.lyning.tddrtw.ioc;
 
+import static pers.lyning.tddrtw.ioc.LayerDependencies.TOP_LAYER;
+
 /**
  * @author lyning
  */
-public class DependenceResolver {
-
-    private static final int TOP_LAYER = 1;
+class DependenceResolver {
 
     private final Class<?> clazz;
 
-    private final DependencyLines dependencyLines;
+    private final DependencyPath dependencyPath = new DependencyPath();
 
     private final LayerDependencies layerDependencies;
 
     public DependenceResolver(Class<?> clazz) {
         this.clazz = clazz;
         layerDependencies = LayerDependencies.root(clazz);
-        dependencyLines = new DependencyLines();
+        dependencyPath.put(clazz);
     }
 
     /**
      * given:
+     * A
+     * <p>
      * A -> B
      * A -> C
+     * <p>
      * return:
      * [
      * {1: ["A"]},
-     * {2: p"B", "C"]}
+     * {2: "B", "C"]}
      * ]
      * <p>
      * -- A       -> 1(layer)
@@ -35,20 +38,18 @@ public class DependenceResolver {
      * @return
      */
     public LayerDependencies resolve() {
-        depthFirstResolve(clazz, TOP_LAYER);
+        depthFirstResolve(clazz, TOP_LAYER + 1);
         return layerDependencies;
     }
 
     private void depthFirstResolve(Class<?> clazz, int layer) {
-        Class<?>[] parameterTypes = clazz.getDeclaredConstructors()[0].getParameterTypes();
-        if (parameterTypes.length == 0) {
-            return;
-        }
-        for (Class<?> parameterType : parameterTypes) {
-            dependencyLines.put(parameterType);
-            CircularReferenceChecker.check(dependencyLines);
-            layerDependencies.put(layer, parameterType);
-            depthFirstResolve(parameterType, layer + 1);
+        Constructible constructible = new ConstructorResolver(clazz).resolve();
+        Class<?>[] parameterTypes = constructible.parameterTypes();
+        for (Class<?> dependency : parameterTypes) {
+            dependencyPath.put(dependency);
+            CircularReferenceChecker.check(dependencyPath);
+            layerDependencies.put(layer, dependency);
+            depthFirstResolve(dependency, layer + 1);
         }
     }
 }

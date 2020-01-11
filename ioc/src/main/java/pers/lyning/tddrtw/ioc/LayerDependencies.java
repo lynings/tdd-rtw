@@ -14,6 +14,8 @@ import static java.util.stream.Collectors.toList;
  */
 class LayerDependencies {
 
+    public static final int TOP_LAYER = 1;
+
     private final Map<Integer, List<Class<?>>> layerToDependenciesMap = new HashMap<>();
 
     @Getter
@@ -35,8 +37,10 @@ class LayerDependencies {
         layerToDependenciesMap.get(layer).add(clazz);
     }
 
-    public static LayerDependencies root(Class<?> clazz) {
-        return new LayerDependencies(clazz);
+    public static LayerDependencies root(Class<?> root) {
+        LayerDependencies layerDependencies = new LayerDependencies(root);
+        layerDependencies.put(TOP_LAYER, root);
+        return layerDependencies;
     }
 }
 

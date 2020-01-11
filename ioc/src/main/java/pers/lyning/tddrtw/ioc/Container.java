@@ -20,11 +20,11 @@ public class Container {
         return registrar.contains(clazz);
     }
 
-    public <T> T inject(Class<T> clazz) throws Exception {
+    public <T> T inject(Class<T> clazz) {
         if (!contain(clazz)) {
             throw new InjectException(String.format("%s unregistered", clazz.toString()));
         }
-        return injecter.inject(clazz);
+        return injecter.get(clazz);
     }
 
     public Container register(Class<?> clazz) {

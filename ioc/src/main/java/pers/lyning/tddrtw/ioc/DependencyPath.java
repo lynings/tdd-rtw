@@ -9,11 +9,11 @@ import static java.util.stream.Collectors.toList;
 /**
  * @author lyning
  */
-class DependencyLines {
-    private final List<Class<?>> dependencyLines = new ArrayList<>();
+class DependencyPath {
+    private final List<Class<?>> dependencyPaths = new ArrayList<>();
 
     List<String> asReverseList() {
-        List<String> dependencies = dependencyLines.stream()
+        List<String> dependencies = dependencyPaths.stream()
                 .map(Class::getCanonicalName)
                 .collect(toList());
         Collections.reverse(dependencies);
@@ -21,10 +21,10 @@ class DependencyLines {
     }
 
     void put(Class<?> dependence) {
-        dependencyLines.add(dependence);
+        dependencyPaths.add(dependence);
     }
 
     int size() {
-        return dependencyLines.size();
+        return dependencyPaths.size();
     }
 }
