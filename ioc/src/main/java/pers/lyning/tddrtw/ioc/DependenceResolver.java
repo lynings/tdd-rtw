@@ -42,7 +42,7 @@ class DependenceResolver {
      */
     public List<Dependence> resolve() {
         depthFirstResolve(clazz, TOP_LAYER + 1);
-        return dependencies.asList()
+        return dependencies.values()
                 .stream()
                 .sorted((a, b) -> b.getLayer().compareTo(a.getLayer()))
                 .collect(toList());

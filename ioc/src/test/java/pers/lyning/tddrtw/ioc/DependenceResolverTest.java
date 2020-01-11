@@ -9,7 +9,6 @@ import pers.lyning.tddrtw.ioc.sample.OneParameterizedConstructor;
 import pers.lyning.tddrtw.ioc.sample.TwoParameterizedConstructor;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,7 +27,7 @@ class DependenceResolverTest {
         List<Dependence> actualLayerDependencies = dependenceResolver.resolve();
         // then
         List<Dependence> expectedLayerDependencies = new ArrayList<>();
-        expectedLayerDependencies.add(new Dependence(1, Arrays.asList(NoParameterConstructor.class)));
+        expectedLayerDependencies.add(new Dependence(1, NoParameterConstructor.class));
         assertThat(actualLayerDependencies)
                 .usingRecursiveFieldByFieldElementComparator()
                 .containsExactlyInAnyOrderElementsOf(expectedLayerDependencies);
@@ -42,8 +41,8 @@ class DependenceResolverTest {
         List<Dependence> actualLayerDependencies = dependenceResolver.resolve();
         // then
         List<Dependence> expectedLayerDependencies = new ArrayList<>();
-        expectedLayerDependencies.add(new Dependence(1, Arrays.asList(OneParameterizedConstructor.class)));
-        expectedLayerDependencies.add(new Dependence(2, Arrays.asList(OneParameterizedConstructor.A.class)));
+        expectedLayerDependencies.add(new Dependence(1, OneParameterizedConstructor.class));
+        expectedLayerDependencies.add(new Dependence(2, OneParameterizedConstructor.A.class));
         assertThat(actualLayerDependencies)
                 .usingRecursiveFieldByFieldElementComparator()
                 .containsExactlyInAnyOrderElementsOf(expectedLayerDependencies);
@@ -57,21 +56,13 @@ class DependenceResolverTest {
         List<Dependence> actualLayerDependencies = dependenceResolver.resolve();
         // then
         List<Dependence> expectedLayerDependencies = new ArrayList<>();
-        expectedLayerDependencies.add(new Dependence(
-                1,
-                Arrays.asList(TwoParameterizedConstructor.class)
-        ));
-        expectedLayerDependencies.add(new Dependence(
-                2,
-                Arrays.asList(TwoParameterizedConstructor.A.class, TwoParameterizedConstructor.B.class)
-        ));
-        expectedLayerDependencies.add(new Dependence(
-                3,
-                Arrays.asList(TwoParameterizedConstructor.InnerA1.class,
-                        TwoParameterizedConstructor.InnerA2.class,
-                        TwoParameterizedConstructor.InnerB1.class,
-                        TwoParameterizedConstructor.InnerB2.class)
-        ));
+        expectedLayerDependencies.add(new Dependence(1, TwoParameterizedConstructor.class));
+        expectedLayerDependencies.add(new Dependence(2, TwoParameterizedConstructor.A.class));
+        expectedLayerDependencies.add(new Dependence(2, TwoParameterizedConstructor.B.class));
+        expectedLayerDependencies.add(new Dependence(3, TwoParameterizedConstructor.InnerA1.class));
+        expectedLayerDependencies.add(new Dependence(3, TwoParameterizedConstructor.InnerA2.class));
+        expectedLayerDependencies.add(new Dependence(3, TwoParameterizedConstructor.InnerB1.class));
+        expectedLayerDependencies.add(new Dependence(3, TwoParameterizedConstructor.InnerB2.class));
         assertThat(actualLayerDependencies)
                 .usingRecursiveFieldByFieldElementComparator()
                 .containsExactlyInAnyOrderElementsOf(expectedLayerDependencies);

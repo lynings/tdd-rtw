@@ -3,8 +3,6 @@ package pers.lyning.tddrtw.ioc;
 import java.util.Arrays;
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
-
 /**
  * @author lyning
  */
@@ -17,7 +15,8 @@ class ConstructorInjecter implements Injecter {
         if (instances.contain(clazz)) {
             return instances.get(clazz).value();
         }
-        inject(new DependenceResolver(clazz).resolve());
+        List<Dependence> dependencies = new DependenceResolver(clazz).resolve();
+        inject(dependencies);
         return instances.get(clazz).value();
     }
 
@@ -30,12 +29,10 @@ class ConstructorInjecter implements Injecter {
         return constructible.newInstance(constructorArgs);
     }
 
-    private void inject(List<Dependence> layerDependencies) {
-        List<Class<?>> dependencies = layerDependencies.stream()
-                .flatMap(dependence -> dependence.getDependencies().stream())
-                .collect(toList());
-        for (Class<?> dependence : dependencies) {
-            instances.put(dependence, inject(dependence));
+    private void inject(List<Dependence> dependencies) {
+        for (Dependence dependence : dependencies) {
+            Class<?> clazz = dependence.getValue();
+            instances.put(clazz, inject(clazz));
         }
     }
 }
