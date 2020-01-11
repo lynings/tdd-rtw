@@ -7,7 +7,7 @@ import java.util.Comparator;
 /**
  * @author lyning
  */
-public class ConstructorResolver {
+class ConstructorResolver {
     private final Class<?> clazz;
 
     public ConstructorResolver(Class<?> clazz) {
