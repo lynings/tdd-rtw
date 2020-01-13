@@ -183,21 +183,11 @@ class ContainerTest {
         }
 
         @Test
-        void should_inject_success_when_use_type_setter_register() throws Exception {
-            // given
-            ioc.register(SetterDependence.class, new TypeSetterProperty<>(SetterDependence.Dependence.class));
-            ioc.register(SetterDependence.Dependence.class);
-            // when
-            SetterDependence instance = ioc.get(SetterDependence.class);
-            // then
-            assertThat(instance.getDependence()).isExactlyInstanceOf(SetterDependence.Dependence.class);
-        }
-
-        @Test
-        void should_inject_success_when_use_type_setter_register_and_cyclic_dependency() throws Exception {
+        void should_inject_success_when_cyclic_dependency() throws Exception {
             // given
             ioc.register(SetterDependence.class,
-                    new TypeSetterProperty<>(SetterDependence.CyclicDependence.class)
+                    new TypeSetterProperty<>(SetterDependence.CyclicDependence.class),
+                    new TypeSetterProperty<>(SetterDependence.Dependence.class)
             );
             ioc.register(SetterDependence.CyclicDependence.class,
                     new TypeSetterProperty<>(SetterDependence.class),
@@ -208,7 +198,19 @@ class ContainerTest {
             SetterDependence instance = ioc.get(SetterDependence.class);
             // then
             assertThat(instance.getCyclicDependence()).isExactlyInstanceOf(SetterDependence.CyclicDependence.class);
+            assertThat(instance.getCyclicDependence().getDependence()).isEqualTo(instance.getDependence());
             assertThat(instance.getCyclicDependence().getSetterDependence()).isEqualTo(instance);
+        }
+
+        @Test
+        void should_inject_success_when_use_type_setter_register() throws Exception {
+            // given
+            ioc.register(SetterDependence.class, new TypeSetterProperty<>(SetterDependence.Dependence.class));
+            ioc.register(SetterDependence.Dependence.class);
+            // when
+            SetterDependence instance = ioc.get(SetterDependence.class);
+            // then
+            assertThat(instance.getDependence()).isExactlyInstanceOf(SetterDependence.Dependence.class);
         }
 
         @Test
