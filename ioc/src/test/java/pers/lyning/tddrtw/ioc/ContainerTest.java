@@ -4,10 +4,7 @@ import org.assertj.core.api.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import pers.lyning.tddrtw.ioc.exception.CircularReferenceException;
-import pers.lyning.tddrtw.ioc.exception.InstanceNotFountException;
-import pers.lyning.tddrtw.ioc.exception.MethodNotFoundException;
-import pers.lyning.tddrtw.ioc.exception.RepeatedRegisteredException;
+import pers.lyning.tddrtw.ioc.exception.*;
 import pers.lyning.tddrtw.ioc.sample.type2.SetterDependence;
 import pers.lyning.tddrtw.ioc.sample.type3.CyclicDependency;
 import pers.lyning.tddrtw.ioc.sample.type3.NoDependence;
@@ -177,6 +174,15 @@ class ContainerTest {
         }
 
         @Test
+        void should_inject_failure_when_type_not_register() throws Exception {
+            ioc.register(SetterDependence.class, new TypeSetterProperty<>(SetterDependence.Dependence.class));
+            // when
+            Assert<?, ? extends Throwable> assertThatThrownBy = assertThatThrownBy(() -> ioc.get(SetterDependence.class));
+            // then
+            assertThatThrownBy.isInstanceOf(UnRegisteredException.class);
+        }
+
+        @Test
         void should_inject_success_when_use_type_setter_register() throws Exception {
             // given
             ioc.register(SetterDependence.class, new TypeSetterProperty<>(SetterDependence.Dependence.class));
@@ -219,6 +225,18 @@ class ContainerTest {
             assertThat(instance.getAge()).isEqualTo(20);
             assertThat(instance.getName()).isEqualTo("hello world!!!");
             assertThat(instance.getDependence()).isNotNull();
+        }
+
+        @Test
+        void should_return_the_same_instance_when_getting_the_same_instance_multiple_times() throws Exception {
+            // given
+            ioc.register(SetterDependence.class, new TypeSetterProperty<>(SetterDependence.Dependence.class));
+            ioc.register(SetterDependence.Dependence.class);
+            // when
+            SetterDependence instance1 = ioc.get(SetterDependence.class);
+            SetterDependence instance2 = ioc.get(SetterDependence.class);
+            // then
+            assertThat(instance1).isEqualTo(instance2);
         }
     }
 }
