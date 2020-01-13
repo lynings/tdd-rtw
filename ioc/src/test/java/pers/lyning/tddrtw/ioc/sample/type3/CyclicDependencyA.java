@@ -1,4 +1,4 @@
-package pers.lyning.tddrtw.ioc.sample;
+package pers.lyning.tddrtw.ioc.sample.type3;
 
 import lombok.Getter;
 
