@@ -2,8 +2,6 @@ package pers.lyning.tddrtw.ioc;
 
 import pers.lyning.tddrtw.ioc.exception.RepeatedRegisteredException;
 
-import java.util.Arrays;
-
 /**
  * @author lyning
  */
@@ -25,15 +23,11 @@ public class Container {
         return injecter.get(clazz);
     }
 
-    public Container register(Class<?> clazz) {
+    public Container register(Class<?> clazz, Property... properties) {
         if (Registry.contain(clazz)) {
             throw new RepeatedRegisteredException(String.format("%s existed", clazz.toString()));
         }
-        Registry.add(clazz);
+        Registry.add(clazz, properties);
         return this;
-    }
-
-    public void register(Class<?> clazz, Property... properties) {
-        Registry.add(clazz, Arrays.asList(properties));
     }
 }

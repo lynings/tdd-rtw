@@ -11,12 +11,11 @@ class Registry {
 
     private static final Set<Type> REGISTRIES = Collections.synchronizedSet(new HashSet<>());
 
-    static void add(Class<?> clazz) {
-        add(clazz, new ArrayList<>());
-    }
-
-    static void add(Class<?> clazz, List<Property> properties) {
-        REGISTRIES.add(Type.of(clazz, properties));
+    static void add(Class<?> clazz, Property... properties) {
+        List<Property> propertyList = Optional.ofNullable(properties)
+                .map(Arrays::asList)
+                .orElse(new ArrayList<>());
+        REGISTRIES.add(Type.of(clazz, propertyList));
     }
 
     static void clear() {

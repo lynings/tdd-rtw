@@ -3,9 +3,9 @@ package pers.lyning.tddrtw.ioc;
 /**
  * @author lyning
  */
-public interface Property {
+public interface Property<T> {
 
     String name();
 
-    Object value();
+    T value();
 }

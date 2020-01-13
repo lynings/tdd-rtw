@@ -5,13 +5,13 @@ import lombok.NonNull;
 /**
  * @author lyning
  */
-public class TypeSetterProperty implements Property {
+public class TypeSetterProperty<T> implements Property<Class<T>> {
 
     private final String name;
 
-    private final Object type;
+    private final Class<T> type;
 
-    public TypeSetterProperty(@NonNull Class<?> type) {
+    public TypeSetterProperty(@NonNull Class<T> type) {
         this.type = type;
         String className = type.getSimpleName();
         name = className.substring(0, 1).toLowerCase() + className.substring(1);
@@ -23,7 +23,7 @@ public class TypeSetterProperty implements Property {
     }
 
     @Override
-    public Object value() {
+    public Class<T> value() {
         return type;
     }
 }

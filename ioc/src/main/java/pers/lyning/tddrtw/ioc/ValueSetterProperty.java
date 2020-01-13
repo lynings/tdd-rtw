@@ -3,13 +3,13 @@ package pers.lyning.tddrtw.ioc;
 /**
  * @author lyning
  */
-public class ValueSetterProperty implements Property {
+public class ValueSetterProperty<T> implements Property<T> {
 
     private final String name;
 
-    private final Object value;
+    private final T value;
 
-    public ValueSetterProperty(String name, Object value) {
+    public ValueSetterProperty(String name, T value) {
         this.name = name;
         this.value = value;
     }
@@ -20,7 +20,7 @@ public class ValueSetterProperty implements Property {
     }
 
     @Override
-    public Object value() {
+    public T value() {
         return value;
     }
 }

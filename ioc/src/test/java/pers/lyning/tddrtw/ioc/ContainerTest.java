@@ -157,10 +157,18 @@ class ContainerTest {
         }
 
         @Test
+        void should_inject_failure_when_type_mismatch() throws Exception {
+            // given
+
+            // when
+
+            // then
+        }
+
+        @Test
         void should_inject_success_when_use_type_setter_register() throws Exception {
             // given
-            Property property = new TypeSetterProperty(SetterDependence.Dependence.class);
-            ioc.register(SetterDependence.class, property);
+            ioc.register(SetterDependence.class, new TypeSetterProperty<>(SetterDependence.Dependence.class));
             ioc.register(SetterDependence.Dependence.class);
             // when
             SetterDependence instance = ioc.get(SetterDependence.class);
@@ -172,11 +180,11 @@ class ContainerTest {
         void should_inject_success_when_use_type_setter_register_and_cyclic_dependency() throws Exception {
             // given
             ioc.register(SetterDependence.class,
-                    new TypeSetterProperty(SetterDependence.CyclicDependence.class)
+                    new TypeSetterProperty<>(SetterDependence.CyclicDependence.class)
             );
             ioc.register(SetterDependence.CyclicDependence.class,
-                    new TypeSetterProperty(SetterDependence.class),
-                    new TypeSetterProperty(SetterDependence.Dependence.class)
+                    new TypeSetterProperty<>(SetterDependence.class),
+                    new TypeSetterProperty<>(SetterDependence.Dependence.class)
             );
             ioc.register(SetterDependence.Dependence.class);
             // when
@@ -190,9 +198,9 @@ class ContainerTest {
         void should_inject_success_when_use_value_setter_register() throws Exception {
             // given
             ioc.register(SetterDependence.class,
-                    new ValueSetterProperty("age", 20),
-                    new ValueSetterProperty("name", "hello world!!!"),
-                    new ValueSetterProperty("dependence", new SetterDependence.Dependence()))
+                    new ValueSetterProperty<>("age", 20),
+                    new ValueSetterProperty<>("name", "hello world!!!"),
+                    new ValueSetterProperty<>("dependence", new SetterDependence.Dependence()))
             ;
             // when
             SetterDependence instance = ioc.get(SetterDependence.class);
