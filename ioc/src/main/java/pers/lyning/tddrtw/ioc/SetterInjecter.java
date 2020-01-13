@@ -14,14 +14,14 @@ class SetterInjecter implements Injecter {
 
     @Override
     public <T> T get(Class<T> clazz) {
-        return null;
+        return instances.get(clazz).value();
     }
 
     @Override
     public void inject(Class<?> clazz, List<Property> properties) {
         Constructible constructible = new ConstructorResolver(clazz).lookupDefaultConstructor();
         Instance instance = constructible.newInstance(null);
-        Method[] methods = instance.getClass().getDeclaredMethods();
+        Method[] methods = instance.value().getClass().getDeclaredMethods();
         for (Property property : properties) {
             String methodName = "set" + property.name().substring(0, 1).toUpperCase() + property.name().substring(1);
             Optional<Method> methodOptional = Arrays.stream(methods)
@@ -35,5 +35,6 @@ class SetterInjecter implements Injecter {
                 }
             }
         }
+        instances.put(instance);
     }
 }

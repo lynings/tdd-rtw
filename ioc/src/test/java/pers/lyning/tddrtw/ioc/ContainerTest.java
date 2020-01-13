@@ -159,12 +159,14 @@ class ContainerTest {
         class ValueSetterTest {
 
             @Test
-            void should_contain_type_when_the_type_registered() throws Exception {
+            void should_inject_success_when_use_value_setter_register() throws Exception {
                 // given
                 Property property = new ValueSetterProperty("name", "hello world!!!");
                 ioc.register(OneSetterDependence.class, property);
+                // when
+                OneSetterDependence instance = ioc.get(OneSetterDependence.class);
                 // then
-                assertThat(ioc.contain(OneSetterDependence.class)).isTrue();
+                assertThat(instance.getName()).isEqualTo("hello world!!!");
             }
         }
     }
