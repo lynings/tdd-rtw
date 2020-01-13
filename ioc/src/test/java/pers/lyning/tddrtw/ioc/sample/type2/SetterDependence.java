@@ -28,4 +28,8 @@ public class SetterDependence {
 
         private SetterDependence setterDependence;
     }
+
+    public static class Independent {
+
+    }
 }

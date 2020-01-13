@@ -34,8 +34,14 @@ public class Type {
         return Objects.hash(clazz);
     }
 
-    public static Type of(Class<?> clazz) {
-        return new Type(clazz, new ArrayList<>());
+    public Instance instance() {
+        Constructible constructible = new ConstructorResolver(getClazz()).resolve();
+        Object[] constructorArgs = Arrays.stream(constructible.parameterTypes())
+                .map(Instances::get)
+                .map(Instance::value)
+                .toArray();
+        return constructible.newInstance(constructorArgs);
+
     }
 
     public static Type of(Class<?> clazz, Property... properties) {
@@ -43,5 +49,9 @@ public class Type {
                 .map(Arrays::asList)
                 .orElse(new ArrayList<>());
         return new Type(clazz, propertyList);
+    }
+
+    public static Type of(Class<?> clazz) {
+        return new Type(clazz, new ArrayList<>());
     }
 }

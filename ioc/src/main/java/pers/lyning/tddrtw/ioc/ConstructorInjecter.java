@@ -2,7 +2,6 @@ package pers.lyning.tddrtw.ioc;
 
 import pers.lyning.tddrtw.ioc.exception.InstanceNotFountException;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -29,18 +28,10 @@ class ConstructorInjecter implements Injecter {
         }
     }
 
-    private Instance injectDependence(Dependence dependence) {
-        Constructible constructible = new ConstructorResolver(dependence.getValue()).resolve();
-        Object[] constructorArgs = Arrays.stream(constructible.parameterTypes())
-                .map(Instances::get)
-                .map(Instance::value)
-                .toArray();
-        return constructible.newInstance(constructorArgs);
-    }
-
     private void injectDependence(List<Dependence> dependencies) {
         for (Dependence dependence : dependencies) {
-            Instances.put(injectDependence(dependence));
+            Instance instance = dependence.getType().instance();
+            Instances.put(instance);
         }
     }
 }

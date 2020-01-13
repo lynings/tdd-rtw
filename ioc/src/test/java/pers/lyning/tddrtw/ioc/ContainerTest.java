@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import pers.lyning.tddrtw.ioc.exception.CircularReferenceException;
 import pers.lyning.tddrtw.ioc.exception.InstanceNotFountException;
+import pers.lyning.tddrtw.ioc.exception.MethodNotFoundException;
 import pers.lyning.tddrtw.ioc.exception.RepeatedRegisteredException;
 import pers.lyning.tddrtw.ioc.sample.type2.SetterDependence;
 import pers.lyning.tddrtw.ioc.sample.type3.CyclicDependency;
@@ -157,12 +158,22 @@ class ContainerTest {
         }
 
         @Test
-        void should_inject_failure_when_type_mismatch() throws Exception {
-            // given
-
+        void should_inject_failure_when_inject_value_not_mismatch() throws Exception {
+            ioc.register(SetterDependence.class, new ValueSetterProperty<>("age", "123"));
             // when
-
+            Assert<?, ? extends Throwable> assertThatThrownBy = assertThatThrownBy(() -> ioc.get(SetterDependence.class));
             // then
+            assertThatThrownBy.isInstanceOf(SetterInjecterException.class);
+        }
+
+        @Test
+        void should_inject_failure_when_type_mismatch() throws Exception {
+            ioc.register(SetterDependence.class, new TypeSetterProperty<>(SetterDependence.Independent.class));
+            ioc.register(SetterDependence.Independent.class);
+            // when
+            Assert<?, ? extends Throwable> assertThatThrownBy = assertThatThrownBy(() -> ioc.get(SetterDependence.class));
+            // then
+            assertThatThrownBy.isInstanceOf(MethodNotFoundException.class);
         }
 
         @Test
