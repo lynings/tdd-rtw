@@ -1,7 +1,7 @@
 package pers.lyning.tddrtw.ioc;
 
-import lombok.Setter;
 import org.junit.jupiter.api.Test;
+import pers.lyning.tddrtw.ioc.sample.type2.SetterDependence;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,29 +13,18 @@ class SetterDependenceResolverTest {
     @Test
     void should_return_dependencies_when_resolve_one_dependence() throws Exception {
         // given
-        Registry.add(A.class, new TypeSetterProperty<>(B.class));
-        Registry.add(B.class, new TypeSetterProperty<>(A.class));
-        Type type = Registry.get(A.class);
+        Registry.add(SetterDependence.class, new TypeSetterProperty<>(SetterDependence.Dependence.class));
+        Registry.add(SetterDependence.Dependence.class);
+        Type type = Registry.get(SetterDependence.class);
         // when
         List<Dependence> actualDependencies = new SetterDependenceResolver(type).resolve();
         // then
         List<Dependence> expectedDependencies = Arrays.asList(
                 new Dependence(1, type),
-                new Dependence(2, Type.of(B.class, Arrays.asList(new TypeSetterProperty<>(A.class))))
+                new Dependence(2, Type.of(SetterDependence.Dependence.class))
         );
         assertThat(actualDependencies)
                 .usingRecursiveFieldByFieldElementComparator()
                 .containsExactlyInAnyOrderElementsOf(expectedDependencies);
     }
-
-    @Setter
-    public static class A {
-        private B a;
-    }
-
-    @Setter
-    public static class B {
-        private A a;
-    }
-
 }

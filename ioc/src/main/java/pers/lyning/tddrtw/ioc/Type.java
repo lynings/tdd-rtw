@@ -4,9 +4,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author lyning
@@ -40,7 +38,10 @@ public class Type {
         return new Type(clazz, new ArrayList<>());
     }
 
-    public static Type of(Class<?> clazz, List<Property> properties) {
-        return new Type(clazz, properties);
+    public static Type of(Class<?> clazz, Property... properties) {
+        List<Property> propertyList = Optional.ofNullable(properties)
+                .map(Arrays::asList)
+                .orElse(new ArrayList<>());
+        return new Type(clazz, propertyList);
     }
 }

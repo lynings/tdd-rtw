@@ -2,7 +2,9 @@ package pers.lyning.tddrtw.ioc;
 
 import pers.lyning.tddrtw.ioc.exception.UnRegisteredException;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author lyning
@@ -12,10 +14,7 @@ class Registry {
     private static final Set<Type> REGISTRIES = Collections.synchronizedSet(new HashSet<>());
 
     static void add(Class<?> clazz, Property... properties) {
-        List<Property> propertyList = Optional.ofNullable(properties)
-                .map(Arrays::asList)
-                .orElse(new ArrayList<>());
-        REGISTRIES.add(Type.of(clazz, propertyList));
+        REGISTRIES.add(Type.of(clazz, properties));
     }
 
     static void clear() {
