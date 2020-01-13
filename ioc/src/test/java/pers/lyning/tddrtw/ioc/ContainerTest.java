@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import pers.lyning.tddrtw.ioc.exception.CircularReferenceException;
 import pers.lyning.tddrtw.ioc.exception.InstanceNotFountException;
 import pers.lyning.tddrtw.ioc.exception.RepeatedRegisteredException;
-import pers.lyning.tddrtw.ioc.sample.type2.OneSetterDependence;
+import pers.lyning.tddrtw.ioc.sample.type2.SetterDependence;
 import pers.lyning.tddrtw.ioc.sample.type3.CyclicDependency;
 import pers.lyning.tddrtw.ioc.sample.type3.NoDependence;
 import pers.lyning.tddrtw.ioc.sample.type3.OneDependence;
@@ -24,6 +24,7 @@ class ContainerTest {
 
     @Nested
     class Type3IocTest {
+
         @BeforeEach
         void setUp() {
             ioc = new Container(new ConstructorInjecter());
@@ -155,19 +156,50 @@ class ContainerTest {
             ioc = new Container(new SetterInjecter());
         }
 
-        @Nested
-        class ValueSetterTest {
+        @Test
+        void should_inject_success_when_use_type_setter_register() throws Exception {
+            // given
+            Property property = new TypeSetterProperty(SetterDependence.Dependence.class);
+            ioc.register(SetterDependence.class, property);
+            ioc.register(SetterDependence.Dependence.class);
+            // when
+            SetterDependence instance = ioc.get(SetterDependence.class);
+            // then
+            assertThat(instance.getDependence()).isExactlyInstanceOf(SetterDependence.Dependence.class);
+        }
 
-            @Test
-            void should_inject_success_when_use_value_setter_register() throws Exception {
-                // given
-                Property property = new ValueSetterProperty("name", "hello world!!!");
-                ioc.register(OneSetterDependence.class, property);
-                // when
-                OneSetterDependence instance = ioc.get(OneSetterDependence.class);
-                // then
-                assertThat(instance.getName()).isEqualTo("hello world!!!");
-            }
+        @Test
+        void should_inject_success_when_use_type_setter_register_and_cyclic_dependency() throws Exception {
+            // given
+            ioc.register(SetterDependence.class,
+                    new TypeSetterProperty(SetterDependence.CyclicDependence.class)
+            );
+            ioc.register(SetterDependence.CyclicDependence.class,
+                    new TypeSetterProperty(SetterDependence.class),
+                    new TypeSetterProperty(SetterDependence.Dependence.class)
+            );
+            ioc.register(SetterDependence.Dependence.class);
+            // when
+            SetterDependence instance = ioc.get(SetterDependence.class);
+            // then
+            assertThat(instance.getCyclicDependence()).isExactlyInstanceOf(SetterDependence.CyclicDependence.class);
+            assertThat(instance.getCyclicDependence().getSetterDependence()).isEqualTo(instance);
+        }
+
+        @Test
+        void should_inject_success_when_use_value_setter_register() throws Exception {
+            // given
+            ioc.register(SetterDependence.class,
+                    new ValueSetterProperty("age", 20),
+                    new ValueSetterProperty("name", "hello world!!!"),
+                    new ValueSetterProperty("dependence", new SetterDependence.Dependence()))
+            ;
+            // when
+            SetterDependence instance = ioc.get(SetterDependence.class);
+            // then
+            assertThat(instance.getAge()).isEqualTo(20);
+            assertThat(instance.getName()).isEqualTo("hello world!!!");
+            assertThat(instance.getDependence()).isNotNull();
         }
     }
 }

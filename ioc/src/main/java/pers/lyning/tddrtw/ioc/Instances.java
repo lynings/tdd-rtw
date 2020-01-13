@@ -10,20 +10,24 @@ import java.util.Vector;
  */
 public class Instances {
 
-    private final List<Instance> instances = new Vector<>();
+    private static final List<Instance> INSTANCES = new Vector<>();
 
-    public boolean contain(Class<?> clazz) {
-        return instances.stream().anyMatch(instance -> instance.isInstanceOf(clazz));
+    public static void clear() {
+        INSTANCES.clear();
     }
 
-    public Instance get(Class<?> clazz) {
-        return instances.stream()
+    public static boolean contain(Class<?> clazz) {
+        return INSTANCES.stream().anyMatch(instance -> instance.isInstanceOf(clazz));
+    }
+
+    public static Instance get(Class<?> clazz) {
+        return INSTANCES.stream()
                 .filter(instance -> instance.isInstanceOf(clazz))
                 .findFirst()
                 .orElseThrow(() -> new InstanceNotFountException(String.format("%s not registered!", clazz.toString())));
     }
 
-    public void put(Instance instance) {
-        instances.add(instance);
+    public static void put(Instance instance) {
+        INSTANCES.add(instance);
     }
 }

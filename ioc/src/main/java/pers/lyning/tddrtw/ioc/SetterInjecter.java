@@ -1,40 +1,51 @@
 package pers.lyning.tddrtw.ioc;
 
-import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author lyning
  */
-class SetterInjecter implements Injecter {
-
-    private final Instances instances = new Instances();
+class SetterInjecter extends ConstructorInjecter {
 
     @Override
     public <T> T get(Class<T> clazz) {
-        return instances.get(clazz).value();
+        if (Instances.contain(clazz)) {
+            return Instances.get(clazz).value();
+        }
+        super.get(clazz);
+        Type type = Registry.get(clazz);
+        List<Dependence> dependencies = new SetterDependenceResolver(type).resolve();
+        injectDependencies(dependencies);
+        return Instances.get(clazz).value();
     }
 
-    @Override
-    public void inject(Class<?> clazz, List<Property> properties) {
-        Constructible constructible = new ConstructorResolver(clazz).lookupDefaultConstructor();
-        Instance instance = constructible.newInstance(null);
-        Method[] methods = instance.value().getClass().getDeclaredMethods();
-        for (Property property : properties) {
-            String methodName = "set" + property.name().substring(0, 1).toUpperCase() + property.name().substring(1);
-            Optional<Method> methodOptional = Arrays.stream(methods)
-                    .filter(o -> o.getName().equals(methodName))
-                    .findFirst();
-            if (methodOptional.isPresent()) {
-                try {
-                    methodOptional.get().invoke(instance.value(), property.value());
-                } catch (Exception e) {
-                    throw new SetterInjecterException(String.format("%s.%s not found!", clazz.getName(), methodName));
+    private void injectDependencies(List<Dependence> dependencies) {
+        for (Dependence dependence : dependencies) {
+            Type type = dependence.getType();
+            if (!Instances.contain(type.getClazz())) {
+                instance(type);
+            }
+            Instance instance = Instances.get(type.getClazz());
+            for (Property property : type.getProperties()) {
+                // name -> setName
+                String methodName = "set" + property.name().substring(0, 1).toUpperCase() + property.name().substring(1);
+                if (property instanceof ValueSetterProperty) {
+                    instance.invokeMethod(methodName, property.value());
+                } else if (property instanceof TypeSetterProperty) {
+                    instance.invokeMethod(methodName, Instances.get((Class<?>) property.value()).value());
                 }
             }
         }
-        instances.put(instance);
+    }
+
+    private void instance(Type type) {
+        Constructible constructible = new ConstructorResolver(type.getClazz()).resolve();
+        Object[] constructorArgs = Arrays.stream(constructible.parameterTypes())
+                .map(Instances::get)
+                .map(Instance::value)
+                .toArray();
+        Instance instance = constructible.newInstance(constructorArgs);
+        Instances.put(instance);
     }
 }

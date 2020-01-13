@@ -14,14 +14,14 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 /**
  * @author lyning
  */
-class DependenceResolverTest {
+class ConstructorDependenceResolverTest {
 
     @Test
     void should_failure_when_cyclic_dependency1() throws Exception {
         // given
-        DependenceResolver dependenceResolver = new DependenceResolver(CyclicDependency.class);
+        ConstructorDependenceResolver constructorDependenceResolver = new ConstructorDependenceResolver(CyclicDependency.class);
         // when
-        Assert<?, ? extends Throwable> assertThatThrownBy = assertThatThrownBy(dependenceResolver::resolve);
+        Assert<?, ? extends Throwable> assertThatThrownBy = assertThatThrownBy(constructorDependenceResolver::resolve);
         // then
         assertThatThrownBy.isInstanceOf(CircularReferenceException.class);
     }
@@ -29,9 +29,9 @@ class DependenceResolverTest {
     @Test
     void should_failure_when_cyclic_dependency2() throws Exception {
         // given
-        DependenceResolver dependenceResolver = new DependenceResolver(CyclicDependencyA.class);
+        ConstructorDependenceResolver constructorDependenceResolver = new ConstructorDependenceResolver(CyclicDependencyA.class);
         // when
-        Assert<?, ? extends Throwable> assertThatThrownBy = assertThatThrownBy(dependenceResolver::resolve);
+        Assert<?, ? extends Throwable> assertThatThrownBy = assertThatThrownBy(constructorDependenceResolver::resolve);
         // then
         assertThatThrownBy.isInstanceOf(CircularReferenceException.class);
     }
@@ -39,9 +39,9 @@ class DependenceResolverTest {
     @Test
     void should_return_dependencies_when_resolve_no_constructor_parameter() throws Exception {
         // given
-        DependenceResolver dependenceResolver = new DependenceResolver(NoDependence.class);
+        ConstructorDependenceResolver constructorDependenceResolver = new ConstructorDependenceResolver(NoDependence.class);
         // when
-        List<Dependence> actualDependencies = dependenceResolver.resolve();
+        List<Dependence> actualDependencies = constructorDependenceResolver.resolve();
         // then
         List<Dependence> expectedDependencies = new ArrayList<>();
         expectedDependencies.add(new Dependence(1, NoDependence.class));
@@ -53,9 +53,9 @@ class DependenceResolverTest {
     @Test
     void should_return_dependencies_when_resolve_one_constructor_parameter() throws Exception {
         // given
-        DependenceResolver dependenceResolver = new DependenceResolver(OneDependence.class);
+        ConstructorDependenceResolver constructorDependenceResolver = new ConstructorDependenceResolver(OneDependence.class);
         // when
-        List<Dependence> actualDependencies = dependenceResolver.resolve();
+        List<Dependence> actualDependencies = constructorDependenceResolver.resolve();
         // then
         List<Dependence> expectedDependencies = new ArrayList<>();
         expectedDependencies.add(new Dependence(1, OneDependence.class));
@@ -68,9 +68,9 @@ class DependenceResolverTest {
     @Test
     void should_return_dependencies_when_resolve_two_constructor_parameter() throws Exception {
         // given
-        DependenceResolver dependenceResolver = new DependenceResolver(TwoDependence.class);
+        ConstructorDependenceResolver constructorDependenceResolver = new ConstructorDependenceResolver(TwoDependence.class);
         // when
-        List<Dependence> actualDependencies = dependenceResolver.resolve();
+        List<Dependence> actualDependencies = constructorDependenceResolver.resolve();
         // then
         List<Dependence> expectedDependencies = new ArrayList<>();
         expectedDependencies.add(new Dependence(1, TwoDependence.class));

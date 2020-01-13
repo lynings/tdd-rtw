@@ -10,17 +10,15 @@ import java.util.List;
  */
 class ConstructorInjecter implements Injecter {
 
-    private final Instances instances = new Instances();
-
     @Override
     public <T> T get(Class<T> clazz) {
-        if (instances.contain(clazz)) {
-            return instances.get(clazz).value();
+        if (Instances.contain(clazz)) {
+            return Instances.get(clazz).value();
         }
-        List<Dependence> dependencies = new DependenceResolver(clazz).resolve();
+        List<Dependence> dependencies = new ConstructorDependenceResolver(clazz).resolve();
         checkRegistered(dependencies);
         injectDependence(dependencies);
-        return instances.get(clazz).value();
+        return Instances.get(clazz).value();
     }
 
     private void checkRegistered(List<Dependence> dependencies) {
@@ -32,9 +30,9 @@ class ConstructorInjecter implements Injecter {
     }
 
     private Instance injectDependence(Dependence dependence) {
-        Constructible constructible = new ConstructorResolver(dependence.getValue()).lookupMostParametersConstructor();
+        Constructible constructible = new ConstructorResolver(dependence.getValue()).resolve();
         Object[] constructorArgs = Arrays.stream(constructible.parameterTypes())
-                .map(instances::get)
+                .map(Instances::get)
                 .map(Instance::value)
                 .toArray();
         return constructible.newInstance(constructorArgs);
@@ -42,7 +40,7 @@ class ConstructorInjecter implements Injecter {
 
     private void injectDependence(List<Dependence> dependencies) {
         for (Dependence dependence : dependencies) {
-            instances.put(injectDependence(dependence));
+            Instances.put(injectDependence(dependence));
         }
     }
 }

@@ -13,6 +13,7 @@ public class Container {
 
     public Container(Injecter injecter) {
         Registry.clear();
+        Instances.clear();
         this.injecter = injecter;
     }
 
@@ -33,7 +34,6 @@ public class Container {
     }
 
     public void register(Class<?> clazz, Property... properties) {
-        register(clazz);
-        injecter.inject(clazz, Arrays.asList(properties));
+        Registry.add(clazz, Arrays.asList(properties));
     }
 }

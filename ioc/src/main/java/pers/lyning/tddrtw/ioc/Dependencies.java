@@ -15,11 +15,26 @@ class Dependencies {
     private Dependencies() {
     }
 
+    public boolean contain(Class<?> clazz) {
+        return dependencies.stream()
+                .anyMatch(dependence -> dependence.getValue().equals(clazz));
+    }
+
     public void put(Integer layer, Class<?> clazz) {
         dependencies.add(new Dependence(layer, clazz));
     }
 
+    public void put(Integer layer, Type type) {
+        dependencies.add(new Dependence(layer, type));
+    }
+
     public static Dependencies root(Class<?> root) {
+        Dependencies dependencies = new Dependencies();
+        dependencies.put(TOP_LAYER, root);
+        return dependencies;
+    }
+
+    public static Dependencies root(Type root) {
         Dependencies dependencies = new Dependencies();
         dependencies.put(TOP_LAYER, root);
         return dependencies;

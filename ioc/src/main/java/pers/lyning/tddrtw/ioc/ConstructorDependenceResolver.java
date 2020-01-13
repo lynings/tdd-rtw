@@ -10,7 +10,7 @@ import static pers.lyning.tddrtw.ioc.Dependencies.TOP_LAYER;
 /**
  * @author lyning
  */
-class DependenceResolver {
+class ConstructorDependenceResolver {
 
     private final Class<?> clazz;
 
@@ -18,7 +18,7 @@ class DependenceResolver {
 
     private final DependencyPath dependencyPath = new DependencyPath();
 
-    public DependenceResolver(Class<?> clazz) {
+    public ConstructorDependenceResolver(Class<?> clazz) {
         this.clazz = clazz;
         dependencies = Dependencies.root(clazz);
         dependencyPath.put(clazz);
@@ -52,7 +52,7 @@ class DependenceResolver {
     }
 
     private void depthFirstResolve(Class<?> clazz, int layer) {
-        Constructible constructible = new ConstructorResolver(clazz).lookupMostParametersConstructor();
+        Constructible constructible = new ConstructorResolver(clazz).resolve();
         Class<?>[] parameterTypes = constructible.parameterTypes();
         for (Class<?> dependency : parameterTypes) {
             dependencyPath.put(dependency);
@@ -66,6 +66,7 @@ class DependenceResolver {
      * @author lyning
      */
     static class DependencyPath {
+
         private final List<Class<?>> dependencyPaths = new ArrayList<>();
 
         List<String> asReverseList() {
