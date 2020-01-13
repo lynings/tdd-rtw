@@ -3,8 +3,8 @@ package pers.lyning.tddrtw.ioc;
 import org.assertj.core.api.Assert;
 import org.junit.jupiter.api.Test;
 import pers.lyning.tddrtw.ioc.exception.InstanceNotFountException;
-import pers.lyning.tddrtw.ioc.sample.NoDependence;
-import pers.lyning.tddrtw.ioc.sample.OneDependence;
+import pers.lyning.tddrtw.ioc.sample.type3.NoDependence;
+import pers.lyning.tddrtw.ioc.sample.type3.OneDependence;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

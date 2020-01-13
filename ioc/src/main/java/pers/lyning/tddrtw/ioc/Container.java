@@ -2,6 +2,8 @@ package pers.lyning.tddrtw.ioc;
 
 import pers.lyning.tddrtw.ioc.exception.RepeatedRegisteredException;
 
+import java.util.Arrays;
+
 /**
  * @author lyning
  */
@@ -9,9 +11,9 @@ public class Container {
 
     private final Injecter injecter;
 
-    public Container() {
+    public Container(Injecter injecter) {
         Registry.clear();
-        injecter = new ConstructorInjecter();
+        this.injecter = injecter;
     }
 
     public boolean contain(Class<?> clazz) {
@@ -28,5 +30,10 @@ public class Container {
         }
         Registry.add(clazz);
         return this;
+    }
+
+    public void register(Class<?> clazz, Property... properties) {
+        register(clazz);
+        injecter.inject(clazz, Arrays.asList(properties));
     }
 }

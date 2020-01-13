@@ -3,7 +3,7 @@ package pers.lyning.tddrtw.ioc;
 import org.assertj.core.api.Assert;
 import org.junit.jupiter.api.Test;
 import pers.lyning.tddrtw.ioc.exception.CircularReferenceException;
-import pers.lyning.tddrtw.ioc.sample.*;
+import pers.lyning.tddrtw.ioc.sample.type3.*;
 
 import java.util.ArrayList;
 import java.util.List;

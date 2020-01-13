@@ -11,7 +11,7 @@ class ConstructorResolverTest {
         // given
         ConstructorResolver constructorResolver = new ConstructorResolver(Sample.class);
         // when
-        Constructible constructible = constructorResolver.resolve();
+        Constructible constructible = constructorResolver.lookupMostParametersConstructor();
         // then
         assertThat(constructible.parameterTypes().length).isEqualTo(2);
     }

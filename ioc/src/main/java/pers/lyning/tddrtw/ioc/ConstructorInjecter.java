@@ -32,7 +32,7 @@ class ConstructorInjecter implements Injecter {
     }
 
     private Instance injectDependence(Dependence dependence) {
-        Constructible constructible = new ConstructorResolver(dependence.getValue()).resolve();
+        Constructible constructible = new ConstructorResolver(dependence.getValue()).lookupMostParametersConstructor();
         Object[] constructorArgs = Arrays.stream(constructible.parameterTypes())
                 .map(instances::get)
                 .map(Instance::value)

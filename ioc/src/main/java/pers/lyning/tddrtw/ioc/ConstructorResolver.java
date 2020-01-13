@@ -14,7 +14,15 @@ class ConstructorResolver {
         this.clazz = clazz;
     }
 
-    public Constructible resolve() {
+    public Constructible lookupDefaultConstructor() {
+        return Arrays.stream(clazz.getDeclaredConstructors())
+                // 拿到参数最多的构造函数
+                .max(Comparator.comparingInt(Constructor::getParameterCount))
+                .map(Constructible::new)
+                .get();
+    }
+
+    public Constructible lookupMostParametersConstructor() {
         return Arrays.stream(clazz.getDeclaredConstructors())
                 // 拿到参数最多的构造函数
                 .max(Comparator.comparingInt(Constructor::getParameterCount))

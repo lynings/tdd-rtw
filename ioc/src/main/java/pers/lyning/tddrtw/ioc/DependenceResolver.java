@@ -52,7 +52,7 @@ class DependenceResolver {
     }
 
     private void depthFirstResolve(Class<?> clazz, int layer) {
-        Constructible constructible = new ConstructorResolver(clazz).resolve();
+        Constructible constructible = new ConstructorResolver(clazz).lookupMostParametersConstructor();
         Class<?>[] parameterTypes = constructible.parameterTypes();
         for (Class<?> dependency : parameterTypes) {
             dependencyPath.put(dependency);
