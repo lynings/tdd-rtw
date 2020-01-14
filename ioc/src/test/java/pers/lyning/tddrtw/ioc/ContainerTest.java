@@ -160,7 +160,7 @@ class ContainerTest {
             // when
             Assert<?, ? extends Throwable> assertThatThrownBy = assertThatThrownBy(() -> ioc.get(SetterDependence.class));
             // then
-            assertThatThrownBy.isInstanceOf(SetterInjecterException.class);
+            assertThatThrownBy.isInstanceOf(InjectionException.class);
         }
 
         @Test
