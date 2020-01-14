@@ -155,7 +155,7 @@ class ContainerTest {
         }
 
         @Test
-        void should_inject_failure_when_inject_value_not_mismatch() throws Exception {
+        void should_inject_failure_when_inject_type_of_value_not_mismatch() throws Exception {
             ioc.register(SetterDependence.class, new ValueSetterProperty<>("age", "123"));
             // when
             Assert<?, ? extends Throwable> assertThatThrownBy = assertThatThrownBy(() -> ioc.get(SetterDependence.class));
@@ -183,7 +183,7 @@ class ContainerTest {
         }
 
         @Test
-        void should_inject_success_when_cyclic_dependency() throws Exception {
+        void should_inject_success_when_type_inject_with_setter_given_cyclic_dependencies() throws Exception {
             // given
             ioc.register(SetterDependence.class,
                     new TypeSetterProperty<>(SetterDependence.CyclicDependence.class),

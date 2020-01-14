@@ -1,4 +1,4 @@
-package pers.lyning.tddrtw.ioc;
+package pers.lyning.tddrtw.ioc.exception;
 
 /**
  * @author lyning
