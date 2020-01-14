@@ -15,12 +15,12 @@ class Instance {
         this.value = value;
     }
 
-    public void invokeMethod(String methodName, Object value) {
+    public void invokeMethod(String methodName, Object arg) {
         Method method = lookupMethod(methodName);
         try {
-            method.invoke(value(), value);
+            method.invoke(value(), arg);
         } catch (Exception e) {
-            throw new InjectionException(String.format("%s.%s not found!", value.getClass().getName(), methodName));
+            throw new InjectionException(String.format("%s.%s not found!", arg.getClass().getName(), methodName));
         }
     }
 
