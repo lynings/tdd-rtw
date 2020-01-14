@@ -1,5 +1,6 @@
 package pers.lyning.tddrtw.ioc;
 
+import pers.lyning.tddrtw.ioc.exception.InjectionException;
 import pers.lyning.tddrtw.ioc.exception.MethodNotFoundException;
 
 import java.lang.reflect.Method;
@@ -20,7 +21,7 @@ class Instance {
         try {
             method.invoke(value(), value);
         } catch (Exception e) {
-            throw new SetterInjecterException(String.format("%s.%s not found!", value.getClass().getName(), methodName));
+            throw new InjectionException(String.format("%s.%s not found!", value.getClass().getName(), methodName));
         }
     }
 
