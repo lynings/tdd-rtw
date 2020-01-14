@@ -12,19 +12,18 @@ class SetterInjecter extends ConstructorInjecter {
         if (Instances.contain(clazz)) {
             return Instances.get(clazz).value();
         }
-        T instance = super.get(clazz);
-        Type type = Registry.get(clazz);
-        List<Dependence> dependencies = new SetterDependenceResolver(type).resolve();
-        injectDependencies(dependencies);
-        return instance;
+        T currentInstance = super.get(clazz);
+        injectDependencies(currentInstance);
+        return currentInstance;
     }
 
-    private void injectDependencies(List<Dependence> dependencies) {
+    private <T> void injectDependencies(T rootInstance) {
+        Type rootType = Registry.get(rootInstance.getClass());
+        List<Dependence> dependencies = new SetterDependenceResolver(rootType).resolve();
         for (Dependence dependence : dependencies) {
             Type type = dependence.getType();
             if (!Instances.contain(type.getClazz())) {
-                Instance instance = type.instance();
-                Instances.put(instance);
+                Instances.put(type.instance());
             }
             injectWithSetter(type);
         }
