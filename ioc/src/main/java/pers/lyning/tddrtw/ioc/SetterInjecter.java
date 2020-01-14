@@ -35,7 +35,7 @@ class SetterInjecter extends ConstructorInjecter {
         for (Property property : type.getProperties()) {
             // name -> setName
             String methodName = "set" + property.name().substring(0, 1).toUpperCase() + property.name().substring(1);
-            if (property instanceof ValueSetterProperty) {
+            if (property instanceof NameSetterProperty) {
                 instance.invokeMethod(methodName, property.value());
             } else if (property instanceof TypeSetterProperty) {
                 instance.invokeMethod(methodName, Instances.get((Class<?>) property.value()).value());

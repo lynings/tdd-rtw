@@ -156,7 +156,7 @@ class ContainerTest {
 
         @Test
         void should_inject_failure_when_inject_type_of_value_not_mismatch() throws Exception {
-            ioc.register(SetterDependence.class, new ValueSetterProperty<>("age", "123"));
+            ioc.register(SetterDependence.class, new NameSetterProperty<>("age", "123"));
             // when
             Assert<?, ? extends Throwable> assertThatThrownBy = assertThatThrownBy(() -> ioc.get(SetterDependence.class));
             // then
@@ -203,6 +203,22 @@ class ContainerTest {
         }
 
         @Test
+        void should_inject_success_when_use_name_setter_register() throws Exception {
+            // given
+            ioc.register(SetterDependence.class,
+                    new NameSetterProperty<>("age", 20),
+                    new NameSetterProperty<>("name", "hello world!!!"),
+                    new NameSetterProperty<>("dependence", new SetterDependence.Dependence()))
+            ;
+            // when
+            SetterDependence instance = ioc.get(SetterDependence.class);
+            // then
+            assertThat(instance.getAge()).isEqualTo(20);
+            assertThat(instance.getName()).isEqualTo("hello world!!!");
+            assertThat(instance.getDependence()).isNotNull();
+        }
+
+        @Test
         void should_inject_success_when_use_type_setter_register() throws Exception {
             // given
             ioc.register(SetterDependence.class, new TypeSetterProperty<>(SetterDependence.Dependence.class));
@@ -211,22 +227,6 @@ class ContainerTest {
             SetterDependence instance = ioc.get(SetterDependence.class);
             // then
             assertThat(instance.getDependence()).isExactlyInstanceOf(SetterDependence.Dependence.class);
-        }
-
-        @Test
-        void should_inject_success_when_use_value_setter_register() throws Exception {
-            // given
-            ioc.register(SetterDependence.class,
-                    new ValueSetterProperty<>("age", 20),
-                    new ValueSetterProperty<>("name", "hello world!!!"),
-                    new ValueSetterProperty<>("dependence", new SetterDependence.Dependence()))
-            ;
-            // when
-            SetterDependence instance = ioc.get(SetterDependence.class);
-            // then
-            assertThat(instance.getAge()).isEqualTo(20);
-            assertThat(instance.getName()).isEqualTo("hello world!!!");
-            assertThat(instance.getDependence()).isNotNull();
         }
 
         @Test

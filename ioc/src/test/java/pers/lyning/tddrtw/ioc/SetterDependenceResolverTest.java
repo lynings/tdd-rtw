@@ -22,8 +22,8 @@ class SetterDependenceResolverTest {
         Registry.add(SetterDependence.class,
                 new TypeSetterProperty<>(SetterDependence.Dependence.class),
                 new TypeSetterProperty<>(SetterDependence.CyclicDependence.class),
-                new ValueSetterProperty<>("name", "小明"),
-                new ValueSetterProperty<>("age", 10)
+                new NameSetterProperty<>("name", "小明"),
+                new NameSetterProperty<>("age", 10)
         );
         Registry.add(SetterDependence.CyclicDependence.class, new TypeSetterProperty<>(SetterDependence.class));
         Type type = Registry.get(SetterDependence.class);
@@ -45,8 +45,8 @@ class SetterDependenceResolverTest {
         // given
         Registry.add(SetterDependence.class,
                 new TypeSetterProperty<>(SetterDependence.Dependence.class),
-                new ValueSetterProperty<>("name", "小明"),
-                new ValueSetterProperty<>("age", 10)
+                new NameSetterProperty<>("name", "小明"),
+                new NameSetterProperty<>("age", 10)
         );
         Registry.add(SetterDependence.Dependence.class);
         Type type = Registry.get(SetterDependence.class);
