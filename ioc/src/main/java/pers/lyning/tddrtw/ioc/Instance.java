@@ -1,7 +1,6 @@
 package pers.lyning.tddrtw.ioc;
 
 import pers.lyning.tddrtw.ioc.exception.InjectionException;
-import pers.lyning.tddrtw.ioc.exception.MethodNotFoundException;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -41,6 +40,6 @@ class Instance {
         return Arrays.stream(getMethod())
                 .filter(o -> o.getName().equals(method))
                 .findFirst()
-                .orElseThrow(() -> new MethodNotFoundException(String.format("%s.%s not found!", value.getClass().getName(), method)));
+                .orElseThrow(() -> new InjectionException(String.format("%s.%s not found!", value.getClass().getName(), method)));
     }
 }

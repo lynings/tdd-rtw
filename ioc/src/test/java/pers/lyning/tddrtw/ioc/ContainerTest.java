@@ -164,13 +164,13 @@ class ContainerTest {
         }
 
         @Test
-        void should_inject_failure_when_type_mismatch() throws Exception {
+        void should_inject_failure_when_setter_method_not_found() throws Exception {
             ioc.register(SetterDependence.class, new TypeSetterProperty<>(SetterDependence.Independent.class));
             ioc.register(SetterDependence.Independent.class);
             // when
             Assert<?, ? extends Throwable> assertThatThrownBy = assertThatThrownBy(() -> ioc.get(SetterDependence.class));
             // then
-            assertThatThrownBy.isInstanceOf(MethodNotFoundException.class);
+            assertThatThrownBy.isInstanceOf(InjectionException.class);
         }
 
         @Test
